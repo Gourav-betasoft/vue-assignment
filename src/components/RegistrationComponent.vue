@@ -1,56 +1,47 @@
 <template>
     <div id="lower">
     <v-form
-      ref="form"
+      ref="myform"   @submit.prevent="onSubmit"  class="pa-md-4 mx-lg-auto" 
       v-model="valid"
-      lazy-validation
+      lazy-validation  
     >
       <v-text-field
-        v-model="name"
+        v-model="formData.name"
         :counter="10"
-        :rules="nameRules"
+        :rules="rules.nameRules"
         label="Name"
         required
       ></v-text-field>
   
       <v-text-field
-        v-model="email"
-        :rules="emailRules"
+        v-model="formData.email"
+        :rules="rules.emailRules"
         label="E-mail"
         required
       ></v-text-field>
       
       <v-text-field 
     label="Password" 
-    v-model="password" 
-    :rules="passwordRules" 
+    v-model="formData.password" 
+    :rules="rules.passwordRules" 
     type="password" 
     required
 ></v-text-field>
 
 <v-text-field 
     label="Confirm Password" 
-    v-model="confirmPassword" 
-    :rules="[confirmPasswordRules,passwordConfirmationRule]"
+    v-model="formData.confirmPassword" 
+    :rules="rules.confirmPasswordRules"
     type="password" 
     required
 ></v-text-field>
   
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[v => !!v || 'You must agree to continue!']"
-        label="Do you agree?"
-        required
-      ></v-checkbox>
+<v-btn
+  color="success"
+  class="mr-4" type="submit"
+   >Submit</v-btn>
   
-      <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="validate"
-      >
-        Validate
-      </v-btn>
+   
   
       <v-btn
         color="error"
@@ -59,60 +50,63 @@
       >
         Reset Form
       </v-btn>
-  
-     <v-btn
-     color="success"
-     class="mr-4"
-     @click="submit">Submit</v-btn>
+ 
     </v-form>
     </div>
   </template>
 
   <script>
+import UserMixin from '@/Mixins/UserMixin'
+
   export default {
-    data: () => ({
+  mixins:[UserMixin],
+  data () {
+      return{
+      formData:{
+        name:"",
+        confirmPassword:""
+      },
       valid: true,
-      name: '',
+      rules:{
       nameRules: [
         v => !!v || 'Name is required',
         v => (v && v.length <= 10) || 'Name must be less than 10 characters',
       ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-
-   
-        password: '',
-        confirmPassword: '',
-        passwordRules: [v => !!v || "Password is required"],
-        confirmPasswordRules: [v => !!v || "Password is required"],
-      }),
-
-    methods: {
-      validate () {
-        this.$refs.form.validate()
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      Submit (){
-        this.swal("Data submitted successfully");
-      }
      
-    },
-    computed: {
-    passwordConfirmationRule() {
-        return () => (this.password === this.confirmPassword) || 'Password must match'
-    },
-}
+        confirmPasswordRules: [
+          v => !!v || "Password is required",
+         v => this.formData.password === v || 'Password must match'
+      ]
+    }
+    
+  }},
+    methods: {
+  
+      
+      onSubmit(){
+        const temp =  this.$refs.myform.validate()
+        if(temp){
+        localStorage.setItem("IsloggedIn",1);
+        location.reload();
+        
+
+       
+        }
+       
+        
+      }
+    }, 
   };
 </script>
 <style>
 #lower{
   margin-top:50px;
   padding-bottom: 70px;
+}.v-application .pa-md-4 {
+  padding:10px !important;
+  width:516px;
+  margin:auto;
+
 }
 </style>
    

@@ -1,5 +1,5 @@
 <template>
-  <div id="top" class="container">
+  <div id="top" >
   <v-card
     class="mx-auto"
     max-width="344"
@@ -53,6 +53,11 @@
         data: () => ({
       show: false,
     }),
+    mounted(){
+      const IsloggedIn=localStorage.getItem('IsloggedIn');
+      
+      this.show= IsloggedIn && IsloggedIn  == "1";
+    },
      }
 </script>
 <style scoped>

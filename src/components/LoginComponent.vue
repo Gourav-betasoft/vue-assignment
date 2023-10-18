@@ -1,94 +1,65 @@
 <template>
   <div id="lower">
-  <v-form
-    ref="form"
-  
-    
-  >
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
-      required
-    ></v-text-field>
+    <v-form ref="myform" width="250px" class="pa-md-4 mx-lg-auto" @submit.prevent="onSubmit">
+      <v-text-field v-model="formData.email" :rules="rules.emailRules" label="E-mail" type="email"
+        required></v-text-field>
 
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
 
-  
+      <v-text-field label="Password" v-model="formData.password" :rules="rules.passwordRules" type="password"
+        required></v-text-field>
 
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Do you agree?"
-      required
-    ></v-checkbox>
 
-    <v-btn
-      :disabled="!valid"
-      color="success"
-      class="mr-4"
-      @click="validate"
-    >
-      Validate
-    </v-btn>
 
-    <v-btn
-      color="error"
-      class="mr-4"
-      @click="reset"
-    >
-      Reset Form
-    </v-btn>
+      <v-btn color="success" class="mr-4" type="submit">
+        Submit
+      </v-btn>
 
-    <v-btn
-      color="warning"
-      @click="resetValidation"
-    >
-      Reset Validation
-    </v-btn>
-  </v-form>
+      <v-btn color="error" class="mr-4" @click="reset">
+        Reset Form
+      </v-btn>
+
+
+    </v-form>
   </div>
 </template>
 <script>
-  export default {
-    data: () => ({
-      valid: true,
-      name: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-      ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-  
-      checkbox: false,
-    }),
 
-    methods: {
-      validate () {
-        this.$refs.form.validate()
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      resetValidation () {
-        this.$refs.form.resetValidation()
-      },
-    },
-  }
+import UserMixin from '../Mixins/UserMixin';
+//import Swal from 'vue-sweetalert2';
+export default {
+  name: "AppLogin",
+  mixins: [UserMixin],
+  methods: {
+
+    onSubmit() {
+      const temp = this.$refs.myform.validate()
+      if (temp){
+        localStorage.setItem("IsloggedIn", 1);
+        location.reload();
+        this.$router.push({path: "/about"})
+        
+      }
+      
+      }
+      // else{
+      //     console.log('valid',this.formData);
+
+      // } 
+
+    }
+
+  };
+
 </script>
 <style>
-#lower{
-  margin-top:50px;
+#lower {
+  margin-top: 50px;
   padding-bottom: 70px;
+}
+.v-application .pa-md-4 {
+  padding:10px !important;
+  width:516px;
+  margin:auto;
+
 }
 </style> 
