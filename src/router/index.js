@@ -22,9 +22,19 @@ const routes = [
   },
   {
     path: "/shop",
-    name: "Shop",
+    name: "ShopPage",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/ShopPage.vue"),
+      meta: {
+        auth: true,
+        requiresAuth: true,
+      },
+  },
+  {
+    path: "/cart",
+    name: "CartView",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/CartView.vue"),
     meta: {
       auth: true,
       requiresAuth: true,
@@ -46,6 +56,7 @@ const routes = [
       guest: true,
     },
   },
+ 
 ];
 
 const router = new VueRouter({

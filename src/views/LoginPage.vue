@@ -28,6 +28,7 @@
 </template>
   <script>
 import UserMixin from "../mixins/UserMixin";
+import Swal from 'sweetalert2'
 //import Swal from 'vue-sweetalert2';
 export default {
   name: "LoginPage",
@@ -40,6 +41,8 @@ export default {
           password: this.formData.password,
         };
         console.log(data);
+        Swal.fire("Login Successfully!!");
+
         localStorage.setItem("IsloggedIn", 1);
         this.$router.push({ path: "/about" });
       } else {

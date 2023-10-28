@@ -1,3 +1,4 @@
+
 export default {
     namespaced: true,
     state: {
@@ -17,12 +18,7 @@ export default {
       }
     },
     mutations: {
-      INCREASE_INDEX: function (state) {
-        state.index += 1;
-      },
-      DECREASE_INDEX: function (state) {
-        if (state.index > 0) state.index -= 1;
-      },
+     
       ADD_TO_CART: function (state, payload) {
         let index = -1;
         for (let i = 0; i < state.cart.length; i++) {
@@ -36,17 +32,33 @@ export default {
         if (index == -1) {
           state.cart.push(payload);
         } else {
-          state.cart[index].quantity ++;
+          const item=JSON.parse(JSON.stringify(state.cart[index]));
+          item.quantity+=payload.quantity;
+          state.cart.splice(index,1);
+          state.cart.splice(index,0,item);
         }
       },
       REMOVE_FROM_CART(state,payload) {
         const index = state.cart.indexOf(payload);
-        console.log("index", index, payload)
-        if(index > -1)
-        state.cart.splice(index,1);
-        
+        state.cart.splice(index,1); 
     },
-  
+    INC_QUANTITY:(state,payload) =>{
+       let index=state.cart.indexOf(payload);
+       const item=JSON.parse(JSON.stringify(state.cart[index]));
+       item.quantity+=1;
+       state.cart.splice(index,1);
+       state.cart.splice(index,0,item);
+    },
+    DEC_QUANTITY:(state,payload) => {
+      let index=state.cart.indexOf(payload);
+      const item=JSON.parse(JSON.stringify(state.cart[index]));
+      if(item.quantity==1){
+        return;
+      }
+      item.quantity-=1;
+      state.cart.splice(index,1);
+      state.cart.splice(index,0,item);
+    },
   },
     
     actions: {
@@ -62,6 +74,14 @@ export default {
       remove_item: function ({ commit }, payload) {
         commit("REMOVE_FROM_CART", payload);
       },
+      inc_quantity:function({commit},payload){
+        commit("INC_QUANTITY",payload)
+      },
+      dec_quantity:function({commit},payload){
+        commit("DEC_QUANTITY",payload)
+      },
+   
+      
     }
     };
   

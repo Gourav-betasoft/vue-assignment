@@ -7,25 +7,42 @@
             >HOME</router-link
           ></v-toolbar-title
         >
-        <v-toolbar-title v-if="IsloggedIn" style="margin-left: 30px"
+        <v-toolbar-title v-if="IsloggedIn" style="margin-left: 50px"
           ><router-link to="/about" style="text-decoration: none; color: white"
             >ABOUTUS</router-link
           ></v-toolbar-title
         >
-        <v-toolbar-title v-if="IsloggedIn" style="margin-left: 30px"
+        <v-toolbar-title  style="margin-left: 30px"
           ><router-link to="/shop" style="text-decoration: none; color: white"
             >SHOP</router-link
           ></v-toolbar-title
         >
         <v-spacer></v-spacer>
+        <router-link to="/cart"> 
+          <v-badge
+        avatar
+        bordered
+        overlap
+      >
+        <template v-slot:badge >
+          <v-avatar >
+            {{ cartlength }}
+          </v-avatar>
+        </template>
 
-        <v-btn v-if="!IsloggedIn" style="margin-right: 30px" >
+        <v-avatar size="40" >
+        <v-icon>mdi-cart</v-icon>
+        </v-avatar>
+      </v-badge>
+    
+    </router-link> 
+        <v-btn v-if="!IsloggedIn" style="margin-left: 25px" >
           <router-link to="/login" style="text-decoration: none; color: white"
             >LOGIN</router-link
           >
         </v-btn>
 
-        <v-btn v-if="!IsloggedIn">
+        <v-btn v-if="!IsloggedIn" style="margin-left: 20px">
           <router-link
             to="/register"
             style="text-decoration: none; color: white"
@@ -33,7 +50,7 @@
             >REGISTRATION</router-link
           >
         </v-btn>
-        <v-btn v-if="IsloggedIn" @click="Logout"> LOGOUT </v-btn>
+        <v-btn v-if="IsloggedIn" @click="Logout" style="margin-left: 20px;"> LOGOUT </v-btn>
       </v-app-bar>
     </div>
 
@@ -44,6 +61,7 @@
 </template>
 
 <script>
+ import {mapGetters} from "vuex"
 export default {
   name: "App",
 
@@ -56,6 +74,9 @@ export default {
     this.IsloggedIn = IsloggedInn && IsloggedInn == "1";
     console.log("navbar", this.IsloggedIn);
   },
+  computed:{
+      ...mapGetters ({cartlength:"user/CART_LENGTH",})
+    },
 
   methods: {
     login() {
@@ -71,6 +92,7 @@ export default {
     registration() {
       this.$router.push({ path: "/register" });
     },
+   
   },
 };
 </script>
